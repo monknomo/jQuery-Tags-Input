@@ -1,5 +1,4 @@
 /*
-
 	jQuery Tags Input Plugin 1.3.3
 	
 	Copyright (c) 2011 XOXCO, Inc
@@ -9,9 +8,7 @@
 	
 	Licensed under the MIT license:
 	http://www.opensource.org/licenses/mit-license.php
-
 	ben@xoxco.com
-
 */
 
 (function($) {
@@ -95,17 +92,30 @@
 					var skipTag = false; 
 				}
 				
-				if (value !='' && skipTag != true) { 
-                    $('<span>').addClass('tag').append(
-                        $('<span>').text(value).append('&nbsp;&nbsp;'),
-                        $('<a>', {
-                            href  : '#',
-                            title : 'Removing tag',
-                            text  : 'x'
-                        }).click(function () {
-                            return $('#' + id).removeTag(escape(value));
-                        })
-                    ).insertBefore('#' + id + '_addTag');
+				if (value !='' && skipTag != true) {
+                    if(tags_callbacks[id] && tags_callbacks[id]['onClickTag']) {
+                        $('<span>').addClass('tag').click(tags_callbacks[id]['onClickTag']).append(
+                            $('<span>').text(value).append('&nbsp;&nbsp;'),
+                            $('<a>', {
+                                href  : '#',
+                                title : 'Removing tag',
+                                text  : 'x'
+                            }).click(function () {
+                                return $('#' + id).removeTag(escape(value));
+                            })
+                        ).insertBefore('#' + id + '_addTag');
+                    } else {
+                        $('<span>').addClass('tag').append(
+                            $('<span>').text(value).append('&nbsp;&nbsp;'),
+                            $('<a>', {
+                                href  : '#',
+                                title : 'Removing tag',
+                                text  : 'x'
+                            }).click(function () {
+                                return $('#' + id).removeTag(escape(value));
+                            })
+                        ).insertBefore('#' + id + '_addTag');
+                    }
 
 					tagslist.push(value);
 				
@@ -211,11 +221,12 @@
 	
 			delimiter[id] = data.delimiter;
 			
-			if (settings.onAddTag || settings.onRemoveTag || settings.onChange) {
+			if (settings.onAddTag || settings.onRemoveTag || settings.onChange || settings.onClickTag) {
 				tags_callbacks[id] = new Array();
 				tags_callbacks[id]['onAddTag'] = settings.onAddTag;
 				tags_callbacks[id]['onRemoveTag'] = settings.onRemoveTag;
 				tags_callbacks[id]['onChange'] = settings.onChange;
+                tags_callbacks[id]['onClickTag'] = settings.onClickTag;
 			}
 	
 			var markup = '<div id="'+id+'_tagsinput" class="tagsinput"><div id="'+id+'_addTag">';
@@ -320,7 +331,7 @@
 				//Removes the not_valid class when user changes the value of the fake input
 				if(data.unique) {
 				    $(data.fake_input).keydown(function(event){
-				        if(event.keyCode == 8 || String.fromCharCode(event.which).match(/\w+|[√°√©√≠√≥√∫√Å√â√ç√ì√ö√±√ë,/]+/)) {
+				        if(event.keyCode == 8 || String.fromCharCode(event.which).match(/\w+|[·ÈÌÛ˙¡…Õ”⁄Ò—,/]+/)) {
 				            $(this).removeClass('not_valid');
 				        }
 				    });

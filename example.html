@@ -23,6 +23,10 @@
 		function onChangeTag(input,tag) {
 			alert("Changed a tag: " + tag);
 		}
+        
+        function onClickTag(input, tag){
+            alert("Clicked a tag: " + tag);
+        }
 		
 		$(function() {
 
@@ -48,7 +52,7 @@
 			
 
 // Uncomment this line to see the callback functions in action
-//			$('input.tags').tagsInput({onAddTag:onAddTag,onRemoveTag:onRemoveTag,onChange: onChangeTag});		
+//			$('input.tags').tagsInput({onAddTag:onAddTag,onRemoveTag:onRemoveTag,onChange: onChangeTag,onClickTag:onClickTag});		
 
 // Uncomment this line to see an input with no interface for adding new tags.
 //			$('input.tags').tagsInput({interactive:false});
