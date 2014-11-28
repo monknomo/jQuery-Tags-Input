@@ -93,31 +93,23 @@
 				}
 				
 				if (value !='' && skipTag != true) {
+                    var tagSpan = $('<span>').addClass('tag').append(
+                            $('<span>').text(value).append('&nbsp;&nbsp;'),
+                            $('<a>', {
+                                href  : '#',
+                                title : 'Removing tag',
+                                text  : 'x'
+                            }).click(function () {
+                                return $('#' + id).removeTag(escape(value));
+                            })
+                        )                    
+                    
                     if(tags_callbacks[id] && tags_callbacks[id]['onClickTag']) {
-                        $('<span>').addClass('tag').click(tags_callbacks[id]['onClickTag']).append(
-                            $('<span>').text(value).append('&nbsp;&nbsp;'),
-                            $('<a>', {
-                                href  : '#',
-                                title : 'Removing tag',
-                                text  : 'x'
-                            }).click(function () {
-                                return $('#' + id).removeTag(escape(value));
-                            })
-                        ).insertBefore('#' + id + '_addTag');
-                    } else {
-                        $('<span>').addClass('tag').append(
-                            $('<span>').text(value).append('&nbsp;&nbsp;'),
-                            $('<a>', {
-                                href  : '#',
-                                title : 'Removing tag',
-                                text  : 'x'
-                            }).click(function () {
-                                return $('#' + id).removeTag(escape(value));
-                            })
-                        ).insertBefore('#' + id + '_addTag');
+                       tagSpan.click(value, tags_callbacks[id]['onClickTag'])
                     }
-
-					tagslist.push(value);
+                    
+                    tagSpan.insertBefore('#' + id + '_addTag');
+                    tagslist.push(value);
 				
 					$('#'+id+'_tag').val('');
 					if (options.focus) {
